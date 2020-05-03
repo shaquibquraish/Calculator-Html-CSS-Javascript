@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="A simple calculator website" />
+    <meta name="keywords" content="CALCULATOR,CALCI,SCIENTIFIC-CALCULATOR" />
+    <meta name="author" content="Md Shaquib" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .main-div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100vh;
+      }
+      .calc-wrapper {
+        width: 300px;
+        min-height: 390px;
+        background-color: #dce3e3;
+        border: 1px solid darkgray;
+        box-shadow: 0px 0px 10px gainsboro;
+      }
+      .display-board {
+        width: 100%;
+        height: 120px;
+        background-color: #eeeeee;
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        padding-right: 15px;
+        padding-bottom: 5px;
+        padding-top: 20px;
+      }
+      .display-board h2 {
+        margin-bottom: 0px;
+        font-family: sans-serif;
+        font-size: 30px;
+      }
+      table {
+        width: 100%;
+        height: 250px;
+      }
+      button {
+        width: 70px;
+        height: 50px;
+      }
+      button:hover {
+        background-color: #4c90af;
+        color: white;
+      }
+      .light {
+        font-size: 15px;
+        background-color: #e6eff0;
+      }
+
+      .dark {
+        font-weight: bold;
+        font-size: 18px;
+        font-family: sans-serif;
+        background-color: white;
+      }
+      .big {
+        font-size: 22px;
+        background-color: #e6eff0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+    <script>
+      var myOperation;
+      var operationTyped;
+      var term;
+      var total = 0;
+
+      function myFun(x) {
+        const textToShow = document.getElementById("display_text");
+        if (operationTyped) {
+          textToShow.textContent = "";
+          operationTyped = false;
+        }
+
+        if (textToShow.textContent == "0") {
+          textToShow.textContent = x;
+        } else {
+          textToShow.textContent += x;
+        }
+      }
+
+      function clearAll() {
+        const textToShow = document.getElementById("display_text");
+        total = 0;
+
+        textToShow.textContent = "0";
+      }
+
+      function back() {
+        const textToShow = document.getElementById("display_text");
+        if (textToShow.textContent.length == 1 && textToShow.textContent == 0) {
+          return;
+        } else if (textToShow.textContent.length == 1) {
+          textToShow.textContent = 0;
+        } else {
+          textToShow.textContent = textToShow.textContent.slice(
+            0,
+            textToShow.textContent.length - 1
+          );
+        }
+      }
+      function evaluate(b) {
+        if (myOperation == "+") {
+          total += parseFloat(term);
+        } else if (myOperation == "*") {
+          if (total == 0) {
+            total = 1;
+          }
+          total *= parseFloat(term);
+        } else if (myOperation == "/") {
+          if (total == 0) {
+            total = parseFloat(term);
+          } else {
+            total /= parseFloat(term);
+          }
+        } else if (myOperation == "-") {
+          if (total == 0) {
+            total = parseFloat(term);
+          } else {
+            total -= parseFloat(term);
+          }
+        }
+        var x = total;
+        if (b) {
+          total = 0;
+        }
+        return x;
+      }
+      function changeOperation(x) {
+        const textToShow = document.getElementById("display_text");
+        term = textToShow.textContent;
+        operationTyped = true;
+        console.log(term);
+        myOperation = x;
+        textToShow.textContent = evaluate(false);
+      }
+      function calculate() {
+        const textToShow = document.getElementById("display_text");
+        term = textToShow.textContent;
+        textToShow.textContent = evaluate(true);
+      }
+    </script>
+  </head>
+  <body>
+    <main>
+      <div class="main-div">
+        <div class="calc-wrapper">
+          <div class="display-board">
+            <h2 id="display_text">0</h2>
+          </div>
+          <div class="calc-table">
+            <table>
+              <tr>
+                <td><button onclick="clearAll()" class="light">CE</button></td>
+                <td><button onclick="clearAll()" class="light">C</button></td>
+                <td><button onclick="back()" class="light">B</button></td>
+                <td>
+                  <button class="big" onclick="changeOperation('/')">/</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <button onclick="myFun(7)" class="dark">7</button>
+                </td>
+                <td><button onclick="myFun(8)" class="dark">8</button></td>
+                <td><button onclick="myFun(9)" class="dark">9</button></td>
+                <td>
+                  <button class="big" onclick="changeOperation('*')">X</button>
+                </td>
+              </tr>
+              <tr>
+                <td><button onclick="myFun(4)" class="dark">4</button></td>
+                <td><button onclick="myFun(5)" class="dark">5</button></td>
+                <td><button onclick="myFun(6)" class="dark">6</button></td>
+                <td>
+                  <button class="big" onclick="changeOperation('-')">-</button>
+                </td>
+              </tr>
+              <tr>
+                <td><button onclick="myFun(1)" class="dark">1</button></td>
+                <td><button onclick="myFun(2)" class="dark">2</button></td>
+                <td><button onclick="myFun(3)" class="dark">3</button></td>
+                <td>
+                  <button class="big" onclick="changeOperation('+')">+</button>
+                </td>
+              </tr>
+              <tr>
+                <td><button class="dark"></button></td>
+                <td><button onclick="myFun(0)" class="dark">0</button></td>
+                <td><button class="dark" onclick="myFun('.')">.</button></td>
+                <td>
+                  <button class="big" onclick="calculate()">=</button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
